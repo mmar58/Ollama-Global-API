@@ -20,7 +20,7 @@ You can use direct link of the port to use the test html `(/public/index.html)` 
 
 # Tasks
 
-- [ ] Enable model list api
+- [x] Enable model list api
 - [ ] Replace test html with <https://github.com/mmar58/Ollama-Chat>
 
 
