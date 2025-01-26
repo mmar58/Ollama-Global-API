@@ -96,6 +96,29 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 });
+// API endpoint to model list
+// API endpoint to fetch model list
+app.get('/api/tags', async (req, res) => {
+  try {
+    const response = await fetch(ollamaUrl + "tags", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const tags = await response.json();
+    res.json(tags);
+  } catch (error) {
+    console.error("Error fetching tags:", error);
+    res.status(500).json({ error: "Failed to fetch tags." });
+  }
+});
+
 
 // Start the Express server
 app.listen(port, () => {
