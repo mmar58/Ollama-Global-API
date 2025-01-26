@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Chat API</title>
+</head>
+<body>
+  <h1>Test Chat API</h1>
+  <form id="chat-form">
+    <label for="prompt">Enter your prompt:</label><br>
+    <input type="text" id="prompt" name="prompt" style="width: 300px;" required><br><br>
+    <button type="submit">Send</button>
+  </form>
+  <pre id="response" style="margin-top: 20px; background: #f4f4f4; padding: 10px; border: 1px solid #ccc; max-width: 500px; white-space: pre-wrap;"></pre>
+
+  <script>
+    const form = document.getElementById('chat-form');
+    const responseEl = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prompt = document.getElementById('prompt').value;
+      responseEl.textContent = 'Loading...';
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prompt: prompt,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let resultText = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          resultText += decoder.decode(value, { stream: true });
+          responseEl.textContent = resultText;
+        }
+      } catch (error) {
+        responseEl.textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
