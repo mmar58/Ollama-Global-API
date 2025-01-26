@@ -8,10 +8,6 @@ const port = 8981;
 
 const ollamaUrl = "http://localhost:11434/api/"; // Base URL of the Ollama API
 
-let chatHistory = [
-  { role: "system", content: "You are a helpful assistant." },
-];
-
 // Middleware to parse JSON requests
 app.use(express.json());
 app.use(cors()); // Enable CORS for all origins
@@ -43,30 +39,19 @@ async function processStream(reader, res) {
     }
   }
 
-  // Add the full assistant response to chat history
-  chatHistory.push({
-    role: "assistant",
-    content: resultText.trim(),
-  });
-
   // End the streaming response
   res.end();
 }
 
 // API endpoint to send chat prompt
 app.post('/api/chat', async (req, res) => {
-  const { prompt, model = "llama3.2:latest" } = req.body;
-    console.log("Received request",prompt,model)
-  if (!prompt) {
+  const { messages, model = "llama3.2:latest" } = req.body;
+    console.log("Received request",messages,model)
+  if (!messages) {
     return res.status(401).json({ error: "Prompt is required." });
   }
 
   try {
-    // Add the user message to the chat history
-    chatHistory.push({
-      role: "user",
-      content: prompt,
-    });
 
     const response = await fetch(ollamaUrl + "chat", {
       method: "POST",
@@ -75,7 +60,7 @@ app.post('/api/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: model,
-        messages: chatHistory,
+        messages: messages,
         stream: true, // Enable streaming
       }),
     });
