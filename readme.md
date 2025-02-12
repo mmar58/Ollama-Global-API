@@ -10,13 +10,13 @@ This allows you to serve your ollama api to other apps without any restriction. 
 # Installation
 
 * npm i
-* npm start
+* npm run start
 
 And you server will run at your specific port. In the script I set it to 8981.
 
 # APIs
 
-You can use direct link of the port to use the test html `(/public/index.html)` to test the apis
+Same as ollama, so no need to do any extra work, just change the ollama port to this one in your existing project
 
 # Tasks
 
