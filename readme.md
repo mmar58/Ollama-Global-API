@@ -20,7 +20,6 @@ Same as ollama, so no need to do any extra work, just change the ollama port to 
 
 # Tasks
 
-- [x] Enable model list api
 - [ ] Replace test html with <https://github.com/mmar58/Ollama-Chat>
 
 
